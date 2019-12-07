@@ -4,4 +4,4 @@ with open("input5.txt", "r") as file:
     tape = [int(s) for s in file.read().split(",")]
 pass
 
-foo = compute(tape)
+foo = compute(tape, 1)

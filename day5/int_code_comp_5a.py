@@ -1,4 +1,5 @@
-def compute(tape):
+def compute(tape, user_input):
+    program_input = user_input
     i = 0
     while True:
         instruction = str(tape[i])
@@ -24,26 +25,40 @@ def compute(tape):
             modes[2] = 0
 
         # handle opcode 1
-        opcode = 1
+        # opcode = 1
         if opcode == 1:
-            A = tape[tape[i + 1]] if modes[0] == 0 else tape[i + 1]
-            B = tape[tape[i + 2]] if modes[1] == 0 else tape[i + 2]
-            C = A + B
+            a = tape[tape[i + 1]] if modes[0] == 0 else tape[i + 1]
+            b = tape[tape[i + 2]] if modes[1] == 0 else tape[i + 2]
+            c = a + b
             if modes[2] == 0:
-                tape[tape[i+3]] = C
+                tape[tape[i+3]] = c
             else:
-                tape[i+3] = C
+                tape[i+3] = c
+            i += 4
 
         # handle opcode 2 (Should be identical to opcode 1 except that it multiplies
         if opcode == 2:
-            A = tape[tape[i + 1]] if modes[0] == 0 else tape[i + 1]
-            B = tape[tape[i + 2]] if modes[1] == 0 else tape[i + 2]
-            C = A * B
+            a = tape[tape[i + 1]] if modes[0] == 0 else tape[i + 1]
+            b = tape[tape[i + 2]] if modes[1] == 0 else tape[i + 2]
+            c = A * B
             if modes[2] == 0:
-                tape[tape[i + 3]] = C
+                tape[tape[i + 3]] = c
             else:
-                tape[i + 3] = C
+                tape[i + 3] = c
+            i += 4
+
+        # handle opcode 3
+        # todo what is input and output for this?
+        if opcode == 3:
+            if modes[0] == 0:
+                tape[tape[i+1]] = program_input
+            else:
+                tape[i+1] = program_input
+
+        if opcode == 4:
+            program_input = tape[tape[i+1]]
 
 
-
+            i += 2
+        program_input = program_output
         break
