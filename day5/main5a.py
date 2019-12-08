@@ -5,3 +5,4 @@ with open("input5.txt", "r") as file:
 pass
 
 foo = compute(tape, 1)
+print(foo)

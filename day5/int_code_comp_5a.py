@@ -1,11 +1,13 @@
 def compute(tape, user_input):
     program_input = user_input
+    program_output = None
     i = 0
     while True:
         instruction = str(tape[i])
         opcode = int(instruction[-2:])
         # check for halt code
         if opcode == 99:
+            return program_output
             break
 
         # read in modes
@@ -40,7 +42,7 @@ def compute(tape, user_input):
         if opcode == 2:
             a = tape[tape[i + 1]] if modes[0] == 0 else tape[i + 1]
             b = tape[tape[i + 2]] if modes[1] == 0 else tape[i + 2]
-            c = A * B
+            c = a * b
             if modes[2] == 0:
                 tape[tape[i + 3]] = c
             else:
@@ -54,11 +56,14 @@ def compute(tape, user_input):
                 tape[tape[i+1]] = program_input
             else:
                 tape[i+1] = program_input
+            i += 2
 
         if opcode == 4:
-            program_input = tape[tape[i+1]]
-
-
+            if modes[0] == 0:
+                program_output = tape[tape[i+1]]
+            else:
+                program_output = tape[i+1]
             i += 2
-        program_input = program_output
-        break
+
+        if program_output:
+            program_input = program_output
