@@ -1,0 +1,6 @@
+COM)BBB
+BBB)CCC
+
+
+
+BBB)GGG
