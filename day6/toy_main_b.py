@@ -6,33 +6,50 @@ logging.basicConfig(filename='example.log', level=logging.DEBUG)
 with open("toy_input_part_b.txt", "r") as file:
     orbit_map = [(string[0:3], string[4:]) for string in file.read().split('\n')]
 
-you_found = False
-san_found = False
+
 counter_global = 0
+num_orbital_transfers_needed = None
 
 
-def orbit_checksum(planet, depth=1):
-    logging.debug(f"checking planet {planet}")
-    global counter_global
-    global you_found
-    global san_found
+def search_upstream(planet, depth):
+    logging.debug(f"search_upstream(): checking planet {planet} with depth {depth}")
+    global num_orbital_transfers_needed
+    if num_orbital_transfers_needed:
+        return
 
-    if planet == 'YOU':
-        you_found = True
-        print("found you")
-    if planet == "SAN":
-        san_found = True
-        print("found santa")
 
-    if you_found and san_found:
-        print("hooray!")
+    # get upstream planet
+    for edge in orbit_map:
+        if edge[1] == planet:
+            new_planet = edge[0]
+
+            # look downstream from new planet
+            search_downstream(new_planet, depth + 1)
+
+            # search upstream from new planet
+            search_upstream(new_planet, depth + 1)
+
+
+def search_downstream(planet, depth):
+    logging.debug(f"search_downstream(): checking planet {planet} with depth {depth}")
+    global num_orbital_transfers_needed
+    if num_orbital_transfers_needed:
+        return
+
     for edge in orbit_map:
         if edge[0] == planet:
-            counter_global += depth
-            orbit_checksum(edge[1], depth + 1)
-    return
+            new_planet = edge[1]
+            if new_planet == 'SAN':
+                num_orbital_transfers_needed = depth
+
+            search_downstream(new_planet, depth + 1)
 
 
-orbit_checksum("COM")
-print(counter_global)
+search_upstream("YOU", -1)
+print(num_orbital_transfers_needed)
+
+logging.debug("\n")
+
+# orbit_checksum("COM")
+# print(counter_global)
 
