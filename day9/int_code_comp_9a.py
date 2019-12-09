@@ -4,7 +4,7 @@ def compute(tape, user_input):
     pointer = 0
     relative_base = 0
     while True:
-        instruction = str(tape[pointer ])
+        instruction = str(tape[pointer])
 
         # read in opcode
         opcode = int(instruction[-2:])
@@ -29,8 +29,7 @@ def compute(tape, user_input):
         except IndexError:
             modes[2] = 0
 
-        # handle opcode 1
-        # opcode = 1
+        # ============================ #
         if opcode == 1:  # add parameters 1 and 2, output to parameter 3
             if modes[0] == 0:
                 a = tape[tape[pointer + 1]]
@@ -48,7 +47,7 @@ def compute(tape, user_input):
 
             c = a + b
             if modes[2] == 0:
-                tape[tape[pointer +3]] = c
+                tape[tape[pointer + 3]] = c
             elif modes[2] == 1:
                 tape[pointer + 3] = c
             else:  # modes[2] == 2
@@ -56,6 +55,7 @@ def compute(tape, user_input):
 
             pointer += 4
 
+        # ============================ #
         if opcode == 2:  # multiply parameters 1 and 2, output to parameter 3
             if modes[0] == 0:
                 a = tape[tape[pointer + 1]]
@@ -81,7 +81,7 @@ def compute(tape, user_input):
 
             pointer += 4
 
-        # handle opcode 3
+        # ============================ #
         if opcode == 3:  # take int
             if modes[0] == 0:
                 tape[tape[pointer + 1]] = program_input
@@ -91,7 +91,7 @@ def compute(tape, user_input):
                 tape[pointer + 1 + relative_base] = program_input
             pointer += 2
 
-        # handle opcode 4
+        # ============================ #
         if opcode == 4:  # output int
             if modes[0] == 0:
                 program_output = tape[tape[pointer + 1]]
@@ -101,52 +101,93 @@ def compute(tape, user_input):
                 program_output = tape[tape[pointer + 1 + relative_base]]
             pointer += 2
 
+        # ============================ #
         if opcode == 5:  # jump if true
             if modes[0] == 0:
-                if tape[tape[pointer + 1]] != 0:
-                    pointer = tape[tape[pointer + 2]] if modes[1] == 0 else tape[pointer + 2]
-                else:
-                    pointer += 3;
-            else: # modes[0] = 1
-                if tape[pointer + 1] != 0:
-                    pointer = tape[tape[pointer + 2]] if modes[1] == 0 else tape[pointer + 2]
-                else:
-                    pointer += 3;
+                a = tape[tape[pointer + 2]]
+            elif modes[0] == 1:
+                a = tape[pointer + 2]
+            else:  # modes[0] == 2:
+                a = tape[pointer + 2 + relative_base]
 
+            if a != 0:
+                if modes[1] == 0:
+                    pointer = tape[tape[pointer + 2]]
+                elif modes[1] == 1:
+                    pointer = tape[pointer + 2]
+                else:  # modes[1] == 2
+                    pointer = tape[tape[pointer + 2 + relative_base]]
+            else:
+                pointer += 3
+
+        # ============================ #
         if opcode == 6:  # jump if false
             if modes[0] == 0:
-                if tape[tape[pointer + 1]] == 0:
-                    pointer = tape[tape[pointer + 2]] if modes[1] == 0 else tape[pointer + 2]
-                else:
-                    pointer += 3;
-            else: # modes[0] = 1
-                if tape[pointer + 1] == 0:
-                    pointer = tape[tape[pointer + 2]] if modes[1] == 0 else tape[pointer + 2]
-                else:
-                    pointer += 3;
+                a = tape[tape[pointer + 2]]
+            elif modes[0] == 1:
+                a = tape[pointer + 2]
+            else:  # modes[0] == 2:
+                a = tape[pointer + 2 + relative_base]
 
-        if opcode == 7:
-            a = tape[tape[pointer + 1]] if modes[0] == 0 else tape[pointer + 1]
-            b = tape[tape[pointer + 2]] if modes[1] == 0 else tape[pointer + 2]
+            if a == 0:
+                if modes[1] == 0:
+                    pointer = tape[tape[pointer + 2]]
+                elif modes[1] == 1:
+                    pointer = tape[pointer + 2]
+                else:  # modes[1] == 2
+                    pointer = tape[tape[pointer + 2 + relative_base]]
+            else:
+                pointer += 3
+
+        # ============================ #
+        if opcode == 7:  # less than
+            if modes[0] == 0:
+                a = tape[tape[pointer + 1]]
+            elif modes[0] == 1:
+                a = tape[pointer + 1]
+            else:  # modes[0] == 2
+                a = tape[tape[pointer + 1 + relative_base]]
+
+            if modes[1] == 0:
+                b = tape[tape[pointer + 1]]
+            elif modes[1] == 1:
+                b = tape[pointer + 1]
+            else:  # modes[1] == 2
+                b = tape[tape[pointer + 1 + relative_base]]
+
             comparison_result = 1 if a < b else 0
             if modes[2] == 0:
                 tape[tape[pointer + 3]] = comparison_result
-            else:
+            elif modes[2] == 1:
                 tape[pointer + 3] = comparison_result
+            else:  # modes [2] == 2
+                tape[tape[pointer + 3]] = comparison_result
             pointer += 4
 
-        if opcode == 8:
-            a = tape[tape[pointer + 1]] if modes[0] == 0 else tape[pointer + 1]
-            b = tape[tape[pointer + 2]] if modes[1] == 0 else tape[pointer + 2]
-            comparison_result = 1 if a == b else 0
+        # =========================== #
+        if opcode == 8: # greater than
+            if modes[0] == 0:
+                a = tape[tape[pointer + 1]]
+            elif modes[0] == 1:
+                a = tape[pointer + 1]
+            else:  # modes[0] == 2
+                a = tape[tape[pointer + 1 + relative_base]]
+
+            if modes[1] == 0:
+                b = tape[tape[pointer + 1]]
+            elif modes[1] == 1:
+                b = tape[pointer + 1]
+            else:  # modes[1] == 2
+                b = tape[tape[pointer + 1 + relative_base]]
+
+            comparison_result = 1 if a < b else 0
             if modes[2] == 0:
                 tape[tape[pointer + 3]] = comparison_result
-            else:
+            elif modes[2] == 1:
                 tape[pointer + 3] = comparison_result
+            else:  # modes [2] == 2
+                tape[tape[pointer + 3]] = comparison_result
             pointer += 4
-
-        if opcode == 9:
-            a = tape[tape[pointer]]
 
         if program_output:
             program_input = program_output
