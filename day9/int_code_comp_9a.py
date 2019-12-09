@@ -164,7 +164,7 @@ def compute(tape, user_input):
                 tape[tape[pointer + 3]] = comparison_result
             pointer += 4
 
-        # =========================== #
+        # ============================ #
         if opcode == 8: # greater than
             if modes[0] == 0:
                 a = tape[tape[pointer + 1]]
@@ -189,5 +189,17 @@ def compute(tape, user_input):
                 tape[tape[pointer + 3]] = comparison_result
             pointer += 4
 
+        # ============================ #
+        if opcode == 9:  # adjust relative_base
+            if modes[0] == 0:
+                x = tape[tape[pointer + 1]]
+            elif modes[0] == 1:
+                x = tape[pointer + 1]
+            else:  # modes[0] == 2
+                x = tape[tape[pointer + 1]]
+            relative_base += x
+            pointer += 2
+
+        # ============================ #
         if program_output:
             program_input = program_output
