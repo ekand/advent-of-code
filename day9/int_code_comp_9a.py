@@ -1,17 +1,22 @@
+import logging
+
+logging.basicConfig(filename='example.log', level=logging.DEBUG)
+
 def compute(tape, user_input):
-    program_input = user_input
     program_output = None
+    program_input = user_input
+    logging.debug(f"program input {program_input}, program_output {program_output}  ")
+
+
     pointer = 0
     relative_base = 0
     while True:
+
         instruction = str(tape[pointer])
 
         # read in opcode
         opcode = int(instruction[-2:])
 
-        # check for halt code
-        if opcode == 99:
-            return program_output
 
         # read in modes
         modes = [0, 0, 0]
@@ -28,6 +33,13 @@ def compute(tape, user_input):
             modes[2] = int(instruction[-5])
         except IndexError:
             modes[2] = 0
+
+        logging.debug(f"pointer {pointer}, program memory: {tape[pointer:pointer+5]}, relative_base {relative_base}, program input {program_input}, program_output {program_output}, opcode {opcode}, modes {modes}")
+
+        # check for halt code
+        if opcode == 99:
+            logging.debug("program halting. \n")
+            return program_output
 
         # ============================ #
         if opcode == 1:  # add parameters 1 and 2, output to parameter 3
@@ -196,7 +208,7 @@ def compute(tape, user_input):
             elif modes[0] == 1:
                 x = tape[pointer + 1]
             else:  # modes[0] == 2
-                x = tape[tape[pointer + 1]]
+                x = tape[tape[pointer + 1 + relative_base]]
             relative_base += x
             pointer += 2
 
