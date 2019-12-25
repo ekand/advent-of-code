@@ -17,7 +17,7 @@ def updated_fuel_needed(mass):
 
 
 
-    return additional_fuel
+    # return additional_fuel
 
 
 with open("input2.txt", 'r') as file:
@@ -34,4 +34,4 @@ for num in numbers:
     total += updated_fuel_needed(num)
 print(total)
 
-print(updated_fuel_needed(1969))
+# print(updated_fuel_needed(1969))
