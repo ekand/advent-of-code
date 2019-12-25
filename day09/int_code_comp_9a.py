@@ -2,11 +2,11 @@ import logging
 
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
+
 def compute(tape, user_input):
     program_output = None
     program_input = user_input
     logging.debug(f"program input {program_input}, program_output {program_output}  ")
-
 
     pointer = 0
     relative_base = 0
@@ -16,7 +16,6 @@ def compute(tape, user_input):
 
         # read in opcode
         opcode = int(instruction[-2:])
-
 
         # read in modes
         modes = [0, 0, 0]
