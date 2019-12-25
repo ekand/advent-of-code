@@ -1,0 +1,9 @@
+DEBUG:root:program input 1, program_output None  
+DEBUG:root:pointer 0, program memory: [109, 1, 204, -1, 1001], relative_base 0, program input 1, program_output None, opcode 9, modes [1, 0, 0]
+DEBUG:root:pointer 2, program memory: [204, -1, 1001, 100, 1], relative_base 1, program input 1, program_output None, opcode 4, modes [2, 0, 0]
+DEBUG:root:pointer 4, program memory: [1001, 100, 1, 100, 1008], relative_base 1, program input 1, program_output 0, opcode 1, modes [0, 1, 0]
+DEBUG:root:pointer 8, program memory: [1008, 100, 16, 101, 1006], relative_base 1, program input 1, program_output 0, opcode 8, modes [0, 1, 0]
+DEBUG:root:pointer 12, program memory: [1006, 101, 0, 99, 0], relative_base 1, program input 1, program_output 0, opcode 6, modes [0, 1, 0]
+DEBUG:root:pointer 15, program memory: [99, 0, 0, 0, 0], relative_base 1, program input 1, program_output 0, opcode 99, modes [0, 0, 0]
+DEBUG:root:program halting. 
+
